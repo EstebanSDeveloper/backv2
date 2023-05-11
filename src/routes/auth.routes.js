@@ -1,74 +1,12 @@
 import { Router } from "express";
-import { UserManagerMongo } from "../daos/managers/userManagerMongo.js";
-import { UserModel } from "../daos/models/user.model.js";
-import passport from "passport";
-import { isValidPassword,createHash } from "../utils.js";
-import jwt from "jsonwebtoken";
-import { options } from "../config/options.js";
+import { tokenSignupController, tokenLoginController, tokenLogoutController} from "../controllers/auth.controller.js";
 
 const router = Router();
-const userManager = new UserManagerMongo(UserModel);
 
-router.post("/login", async (req, res) => {
-	const { email, password } = req.body;
-	try {
-		const user = await userManager.getUserByEmail(email);
-		if (user) {
-			// validar contraseña
-			if (isValidPassword(password, user)) {
-				// generar el token para ese usuario; esta es la información que se va a guardar en el token
-				const token = jwt.sign({ first_name: user.first_name, last_name: user.last_name, email: user.email, role: user.role, _id: user._id},
-                options.server.secretToken,{ expiresIn: "24h" });
-				res.cookie(options.server.cookieToken, token, {
-					httpOnly: true,
-				}).redirect("/products");
-			} else {
-                res.send(`<div>credenciales invalidas, <a href="/login">Intente de nuevo</a></div>`);
-			}
-		} else {
-            res.send(`<div>el usuario no está registrado, <a href="/signup">Registrarse</a></div>`);
-		}
-	} catch (error) {
-		res.json({ status: "error", message: error.message });
-	}
-});
+router.post("/signup", tokenSignupController)
 
-router.post("/signup", async (req, res) => {
-    try {
-        const { first_name, last_name, email, password } = req.body;
-        const user = await userManager.getUserByEmail(email);
-        if (!user) {
-            let role='usuario';
-	        if (email.endsWith("@coder.com")) {
-	            role = "admin";
-	        }
-            const newUser = {
-                first_name, 
-                last_name, 
-                email,
-                password: createHash(password),
-                role
-            }
-            const userCreated = await userManager.addUser(newUser)
-            // le asignamos un token al usuario
-            const token = jwt.sign({ first_name: userCreated.first_name, last_name: userCreated.last_name, email: userCreated.email, role: userCreated.role,  _id: userCreated._id},
-            options.server.secretToken,{ expiresIn: "24h" });
-			res.cookie(options.server.cookieToken, token, {
-				httpOnly: true,
-			}).redirect("/products");
-        } else {
-            res.send(`<div>el usuario ya está registrado, <a href="/login">Loguearse</a></div>`);
-        }
+router.post("/login", tokenLoginController);
 
-    } catch (error) {
-        res.json({ status: "error", message: error.message });
-    }
-})
-
-router.post("/logout",(req,res)=>{
-    req.logout(() => {
-        res.clearCookie(options.server.cookieToken).json({status:"success", message:"sesion finalizada"});
-    });
-});
+router.post("/logout",tokenLogoutController);
 
 export { router as authRouter };

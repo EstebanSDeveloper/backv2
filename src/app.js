@@ -51,7 +51,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", authRouter);
 
-////configuración socket servidor
+//configuración socket servidor
 // const messages=[];
 socketServer.on("connection", async (socketConnected) => {
 	console.log(`Nuevo cliente conectado ${socketConnected.id}`);
