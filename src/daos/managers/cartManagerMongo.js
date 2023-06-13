@@ -44,42 +44,50 @@ class CartManagerMongo{
         }
     };
 
-    async addProductToCart(cartId,productId){
+    async addProductToCart(cartId, productId) {
         try {
             const cart = await this.getCartById(cartId);
-            const productIndex = cart.products.findIndex(prod=>prod.id==productId);
-            if(productIndex>=0){
-                cart.products[productIndex].quantity = cart.products[productIndex].quantity+1;
-            } else {
-                cart.products.push({
-                    id:productId,
-                    quantity:1
-                });
+            const existingProduct = cart.products.find((product) => product.id._id === productId);
+    
+          if (existingProduct) {
+            existingProduct.quantity += 1;
+          } else {
+            const newProduct = {
+              id: productId,
+              quantity: 1,
             };
-            const data = await this.model.findByIdAndUpdate(cartId, cart,{new:true});
-            const response = JSON.parse(JSON.stringify(data));
-            return response;
+            cart.products.push(newProduct);
+          }
+      
+          const updatedCart = await this.model.findByIdAndUpdate(cartId, { products: cart.products }, { new: true });
+          return updatedCart;
         } catch (error) {
-            throw new Error(error.message);
+          throw new Error(error.message);
         }
-    };
+      }
 
-    async deleteProduct(cartId,productId){
+      async deleteProduct(cartId, productId) {
         try {
-            const cart = await this.getCartById(cartId);
-            const productIndex = cart.products.findIndex(prod=>prod.id==productId);
-            if(productIndex>=0){
-                const newProducts = cart.products.filter(prod=>prod.id!=productId);
-                cart.products = [...newProducts];
-                const data = await this.model.findByIdAndUpdate(cartId, cart,{new:true});
-                return data;
-            } else {
-                throw new Error(`El producto no existe en el carrito`);
-            };
+          const cart = await this.getCartById(cartId);
+          const productIndex = cart.products.findIndex((product) => product.id._id === productId);
+      
+          if (productIndex === -1) {
+            throw new Error('El producto no existe en el carrito');
+          }
+      
+          if (cart.products[productIndex].quantity > 1) {
+            cart.products[productIndex].quantity -= 1;
+          } else {
+            cart.products.splice(productIndex, 1);
+          }
+      
+          const updatedCart = await this.model.findByIdAndUpdate(cartId, cart, { new: true });
+          return updatedCart;
         } catch (error) {
-            throw new Error(`Error al eliminar el producto: ${error.message}`);
+          throw new Error(`Error al eliminar el producto: ${error.message}`);
         }
-    };
+      }
+      
 
     async updateCart(id, cart){
         try {
@@ -93,7 +101,7 @@ class CartManagerMongo{
     async updateQuantityInCart(cartId, productId,quantity){
         try {
             const cart = await this.getCartById(cartId);
-            const productIndex = cart.products.findIndex(prod=>prod.id==productId);
+            const productIndex = cart.products.findIndex(prod=>prod.id._id==productId);
             if(productIndex>=0){
                 cart.products[productIndex].quantity = quantity;
             } else {

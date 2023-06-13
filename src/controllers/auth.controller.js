@@ -1,6 +1,6 @@
 import { UserManagerMongo } from "../daos/managers/userManagerMongo.js";
 import { UserModel } from "../daos/models/user.model.js";
-import { isValidPassword,createHash } from "../utils.js";
+import { isValidPassword, createHash } from "../utils.js";
 import jwt from "jsonwebtoken";
 import { options } from "../config/options.js";
 
@@ -11,7 +11,7 @@ export const tokenSignupController = async (req, res) => {
         const { first_name, last_name, email, password } = req.body;
         const user = await userManager.getUserByEmail(email);
         if (!user) {
-            let role='usuario';
+            let role='user';
 	        if (email.endsWith("@coder.com")) {
 	            role = "admin";
 	        }

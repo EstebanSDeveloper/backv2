@@ -1,9 +1,12 @@
 import {Router} from "express";
 import { addCartController, productsInCartController,addProductToCartController, deleteProductFromCartController,
     updateProductsInCartController, updateProductQuantityInCartController, updateProductQuantityInCartController2,
-    deleteProductsInCartController } from "../controllers/cart.controller.js";
-
+    deleteProductsInCartController, getCarts,purchaseCartController } from "../controllers/cart.controller.js";
+import passport from "passport"
 const router = Router();
+
+// ver los carritos creados
+router.get("/", getCarts)
 
 //agregar carrito
 router.post("/", addCartController);
@@ -28,5 +31,8 @@ router.put("/:cid/product/:pid",updateProductQuantityInCartController2);
 
 //ruta para eliminar todos los productos del carrito
 router.delete("/:cid",deleteProductsInCartController);
+
+//finalizar la compra
+router.post("/:cid/purchase", passport.authenticate("authJWT", {session:false}),purchaseCartController);
 
 export {router as cartsRouter};

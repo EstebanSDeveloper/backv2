@@ -18,7 +18,7 @@ export const initializePassport = () => {
 			try {
 				return done(null, jwt_payload)
 			} catch (error) {
-				return done(error);
+				return done({status:"error", message: error.message});
 			}
 		}
 	))

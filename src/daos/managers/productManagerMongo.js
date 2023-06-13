@@ -35,7 +35,7 @@ class ProductManagerMongo{
     async getProductById(id){
         try {
             //Comprobación de la estructura y validez del Id de producto recibido por parámetro
-            if (id.trim().length != 24) {
+            if (typeof id === 'string' && id.trim().length != 24) {
                 throw new Error("El Id de producto ingresado no es válido");
             }
             const data = await this.model.findById(id);

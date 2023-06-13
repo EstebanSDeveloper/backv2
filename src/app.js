@@ -67,3 +67,6 @@ socketServer.on("connection", async (socketConnected) => {
 		socketServer.emit("msgHistory", messages);
 	});
 });
+
+
+//afetr min 47 segunda parte del desafio
