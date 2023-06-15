@@ -50,6 +50,15 @@ class ProductManagerMongo{
         }
     };
 
+    async getProductByNameAndCode(name, code){
+        try {
+            const product = await this.model.findOne({ $or: [{ title: name }, { code: code }] });
+            return product;
+        } catch (error) {
+            throw new Error(`No se encontró el producto`);
+        }
+    };
+
     async updateProduct(id, product){
         try {
             const data = await this.model.findByIdAndUpdate(id, product,{new:true});

@@ -2,6 +2,10 @@
 import { ProductManagerMongo } from "../daos/managers/productManagerMongo.js";
 //importamos el modelo de productos
 import { ProductModel } from "../daos/models/product.model.js";
+import { generateUserErrorInfo } from "../enums/userErrorInfo.js"; // mensaje personalizado de error
+import { CustomError } from "../services/customError.service.js"; // funcion para generar el error
+import { EError } from "../enums/EError.js"; // tipos de errores
+
 
 //services
 // const productManager = new ProductManagerFile('products.json');
@@ -72,21 +76,31 @@ export const getProductController = async (req, res) => {
 
 export const createProductController = async (req, res) => {
 	try {
-		const body = req.body;
-		body.status = Boolean(body.status);
-		body.price = Number(body.price);
-		body.stock = Number(body.stock);
-		// console.log("body: ", body);
-		const productAdded = await productManager.addProduct(body);
-		res.json({
-			status: "success",
-			result: productAdded,
-			message: "product added",
+	  const body = req.body;
+	  body.status = Boolean(body.status);
+	  body.price = Number(body.price);
+	  body.stock = Number(body.stock);
+  
+	  // Verificar si el producto ya existe
+	  const existingProduct = await productManager.getProductByNameAndCode(body.title, body.code);
+	  // Si el producto ya existe, lanzar un error
+	  if (existingProduct) {
+		 CustomError.createError({
+		  name: "Product creation error",
+		  cause: generateUserErrorInfo(req.body),
+		  message: "Error creating a product",
+		  errorCode: EError.INVALID_JSON
 		});
-	} catch (error) {
-		res.status(400).json({ status: "error", message: error.message });
+	  }
+
+	  const productAdded = await productManager.addProduct(body);
+	  res.json({ status: "success", result: productAdded, message: "Product added",});
+
+	} catch (error) {  
+	  res.status(400).json({ status: "error", message: "You cannot repeat the name or code of a product" });
 	}
-}
+  };
+  
 
 export const updateProductController = async (req, res) => {
 	try {
@@ -118,3 +132,4 @@ export const deleteProductController = async (req, res) => {
 		res.status(400).json({ message: error });
 	}
 }
+

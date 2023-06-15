@@ -16,4 +16,5 @@ router.put("/:pid", checkValidProductFields, updateProductController);
 //ruta para eliminar el producto
 router.delete("/:pid", deleteProductController);
 
-export { router as productsRouter };
+
+export {router as productsRouter};

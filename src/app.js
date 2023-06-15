@@ -6,6 +6,7 @@ import path from "path";
 import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { webRouter } from "./routes/web.routes.js";
+import { mocksRouter } from "./routes/mock.routes.js";
 import "./config/dbConnection.js";
 import { Server } from "socket.io";
 import { chatManagerMongo } from "./daos/managers/chatManagerMongo.js";
@@ -14,6 +15,7 @@ import { authRouter } from "./routes/auth.routes.js";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 
 //service
@@ -50,6 +52,8 @@ app.use(webRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", authRouter);
+app.use("/api/mockingproducts", mocksRouter)
+app.use(errorHandler)
 
 //configuración socket servidor
 // const messages=[];
