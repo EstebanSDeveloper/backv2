@@ -27,6 +27,17 @@ export const addCartController = async(req,res)=>{
     }
 }
 
+export const deleteCartController = async(req, res) => {
+    try {
+      const cartId = req.params.id;
+      const response = await cartManager.deleteCart(cartId);
+      res.json({ status: "success", result: response, message: "cart deleted" });
+    } catch (error) {
+      res.status(400).json({ status: "error", error: error.message });
+    }
+  };
+  
+
 export const productsInCartController = async(req,res)=>{
     try {
         const cartId = req.params.cid;
@@ -43,9 +54,9 @@ export const addProductToCartController = async(req,res)=>{
         const cartId = req.params.cid;
         const productId = req.params.pid;
         const cart = await cartManager.getCartById(cartId);
-        // console.log("cart: ", cart);
+        //console.log("cart: ", cart);
         const product = await productManager.getProductById(productId);
-        // console.log("product: ", product);
+        //console.log("product: ", product);
         const cartUpdated = await cartManager.addProductToCart(cartId, productId);
         res.json({status:"success", result:cartUpdated, message:"product added"});
     } catch (error) {
@@ -120,6 +131,7 @@ export const deleteProductsInCartController = async(req,res)=>{
     }
 }
 
+
 export const purchaseCartController =async(req,res)=>{
     try {
         const cartId = req.params.cid;
@@ -153,9 +165,10 @@ export const purchaseCartController =async(req,res)=>{
             }
             console.log("ticketProducts",ticketProducts)
             console.log("rejectedProducts",rejectedProducts)
+            const purchaseDatetime = new Date().toLocaleString(); // Obtener la fecha y hora actual como una cadena formateada
             const newTicket = {
                 code:uuidv4(),
-                purchase_datetime: new Date().toLocaleString(),
+                //purchase_datetime: new Date(purchaseDatetime), // Convertir la cadena formateada en un objeto Date
                 amount: totalPrice, // Asignar el total de precios al campo amount del ticket
                 purchaser: req.user.email
             }
@@ -168,4 +181,3 @@ export const purchaseCartController =async(req,res)=>{
         res.status(400).json({status:"error", error:error.message});
     }
 }
-// falta ahora descontarlo del total de stock

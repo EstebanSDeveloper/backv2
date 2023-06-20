@@ -1,7 +1,7 @@
 import {Router} from "express";
 import { addCartController, productsInCartController,addProductToCartController, deleteProductFromCartController,
     updateProductsInCartController, updateProductQuantityInCartController, updateProductQuantityInCartController2,
-    deleteProductsInCartController, getCarts,purchaseCartController } from "../controllers/cart.controller.js";
+    deleteProductsInCartController, getCarts,purchaseCartController, deleteCartController } from "../controllers/cart.controller.js";
 import passport from "passport"
 const router = Router();
 
@@ -10,6 +10,9 @@ router.get("/", getCarts)
 
 //agregar carrito
 router.post("/", addCartController);
+
+// eliminar carrito por ID
+router.delete("/delete/:id", deleteCartController);
 
 //ruta para listar todos los productos de un carrito
 router.get("/:cid" ,productsInCartController);

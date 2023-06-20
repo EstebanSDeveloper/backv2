@@ -26,6 +26,15 @@ class CartManagerMongo{
         }
     };
 
+    async deleteCart(cartId) {
+      try {
+        const deletedCart = await this.model.findByIdAndRemove(cartId);
+        return deletedCart;
+      } catch (error) {
+        throw new Error(`Error al eliminar el carrito: ${error.message}`);
+      }
+    }
+
     async getCartById(id){
         try {
             //Comprobación de la estructura y validez del Id del carrito recibido por parámetro
@@ -47,8 +56,8 @@ class CartManagerMongo{
     async addProductToCart(cartId, productId) {
         try {
             const cart = await this.getCartById(cartId);
-            const existingProduct = cart.products.find((product) => product.id._id === productId);
-    
+            const existingProduct = cart.products.find((product) => product.id && product.id._id === productId);
+          //console.log(existingProduct)
           if (existingProduct) {
             existingProduct.quantity += 1;
           } else {
@@ -69,7 +78,8 @@ class CartManagerMongo{
       async deleteProduct(cartId, productId) {
         try {
           const cart = await this.getCartById(cartId);
-          const productIndex = cart.products.findIndex((product) => product.id._id === productId);
+          const productIndex = cart.products.findIndex((product) => product.id && product.id._id === productId);
+
       
           if (productIndex === -1) {
             throw new Error('El producto no existe en el carrito');
@@ -101,7 +111,7 @@ class CartManagerMongo{
     async updateQuantityInCart(cartId, productId,quantity){
         try {
             const cart = await this.getCartById(cartId);
-            const productIndex = cart.products.findIndex(prod=>prod.id._id==productId);
+            const productIndex = cart.products.findIndex((product) => product.id && product.id._id === productId);
             if(productIndex>=0){
                 cart.products[productIndex].quantity = quantity;
             } else {
