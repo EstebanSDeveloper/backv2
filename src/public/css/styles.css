@@ -1,19 +1,116 @@
-body{
-    margin:0;
+nav {
+    background-color: #f5f5f5;
+    padding: 10px;
+  }
+  
+  nav span {
+    margin-right: 10px;
+  }
+  
+  nav a {
+    color: #333;
+    text-decoration: none;
+    padding: 5px;
+  }
+  
+  nav a:hover {
+    color: #fff;
+    background-color: #333;
+  }
+  
+  #logoutBtn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  #logoutBtn:hover {
+    background-color: #666;
+  }
+
+/* ESTILOS PRODUCTS */
+  
+  body {
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
 }
-nav{
-    width:100%;
-    background-color: blueviolet;
-    color:white;
-    height: 30px;
+
+.welcome {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 10px;
 }
-footer{
-    width:100%;
-    background-color: black;
-    color:white;
-    height: 15px;
+
+.title {
+    color: #333;
+    font-size: 25px;
+    margin-bottom: 20px;
 }
-span a{
-    padding:5px;
-    color:white;
+
+.list-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.product-info {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.product-link {
+    text-decoration: none;
+    color: #333;
+    margin-right: 10px;
+}
+
+.add-to-cart {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.prev-link,
+.next-link {
+    color: #333;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.current-page {
+    font-weight: bold;
+}
+
+.no-products {
+    color: #666;
+}
+
+/* PROFILE  */
+
+.title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.welcome,
+.email,
+.role {
+  color: #666;
+  margin-bottom: 10px;
 }

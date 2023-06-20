@@ -1,8 +1,9 @@
 import { UserManagerMongo } from "../daos/managers/userManagerMongo.js";
 import { UserModel } from "../daos/models/user.model.js";
-import { isValidPassword, createHash } from "../utils.js";
 import jwt from "jsonwebtoken";
 import { options } from "../config/options.js";
+import { sendRecoveryPass } from "../utils/email.js";
+import { generateEmailToken , verifyEmailToken, isValidPassword, createHash} from "../utils.js";
 
 const userManager = new UserManagerMongo(UserModel);
 
@@ -50,7 +51,7 @@ export const tokenLoginController = async (req, res) => {
                 options.server.secretToken,{ expiresIn: "24h" });
 				res.cookie(options.server.cookieToken, token, {
 					httpOnly: true,
-				}).redirect("/products");
+				}).redirect("/profile");
 			} else {
                 res.send(`<div>credenciales invalidas, <a href="/login">Intente de nuevo</a></div>`);
 			}
@@ -66,4 +67,47 @@ export const tokenLogoutController = (req,res)=>{
     req.logout(() => {
         res.clearCookie(options.server.cookieToken).json({status:"success", message:"sesion finalizada"});
     });
+}
+
+export const forgotPasswordController = async (req,res)=>{
+    try {
+        //recibinmos el correo de forgot password handlebars
+        const {email} =req.body
+        //verificamos que el usuario exista
+        const user = await userManager.getUserByEmail(email);
+        if (!user) {
+          return res.send(`<div>Error, <a href='/forgot-password'>Intente nuevamente </a></div>`)
+        } 
+        // si si existe, generamos el token del enlace
+        const token = generateEmailToken(email,3*60)
+        await sendRecoveryPass(email, token)
+        res.send(
+            `Se ha enviado un correo de recuperación para reestablecer la contraseña de su cuenta. <a href='/login'>Vuelve al login</a>`)
+    } catch (error) {
+        res.send(`<div>Error, <a href='/forgot-password'>Intente nuevamente </a></div>`)
+    }
+}
+
+export const resetPasswordController = async (req,res) => {
+    try {
+        const token = req.query.token
+        const {email, newPassword} = req.body
+        // validamos que el token aún sea válido, por el tiempo 
+        const validEmail = verifyEmailToken(token)
+        if (!validEmail) {
+            return res.send(`El enlace ya no es valido, genere un nuevo enlace para recuperación de contraseña <a href='/forgot-password'>Recuperar contraseña</a>`)
+        } 
+        const user = await userManager.getUserByEmail(email);
+        if (isValidPassword(newPassword, user)) {
+            return res.send("No puedes usar la misma contraseña")
+        }
+        const userData = {
+            ...user._doc,
+            password: createHash(newPassword)
+        }
+        const userUpdate = await UserModel.findOneAndUpdate({email:email}, userData)
+        res.render('login', {message: "La contraseña ha sido actualizada, intente ingresar nuevamente"} )
+    } catch (error) {
+        res.send(error.message)
+    }
 }

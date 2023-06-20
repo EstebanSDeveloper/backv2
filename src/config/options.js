@@ -7,6 +7,9 @@ const MONGO_DB_PASS = process.env.MONGO_DB_PASS;
 const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
 const SECRET_TOKEN = process.env.SECRET_TOKEN;
 const COOKIE_TOKEN = process.env.COOKIE_TOKEN;
+const SECRET_TOKEN_EMAIL = process.env.SECRET_TOKEN_EMAIL;
+const EMAIL_ADMIN = process.env.EMAIL_ADMIN;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD
 
 export const options = {
 	fileSystem: {
@@ -21,4 +24,9 @@ export const options = {
 		secretToken: SECRET_TOKEN,
 		cookieToken: COOKIE_TOKEN,
 	},
+	gmail:{
+		emailToken: SECRET_TOKEN_EMAIL,
+		emailAdmin: EMAIL_ADMIN,
+		emailPass: EMAIL_PASSWORD
+	}
 };

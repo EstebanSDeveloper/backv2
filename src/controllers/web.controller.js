@@ -97,12 +97,22 @@ export const renderSignup = (req,res)=>{
 }
 
 export const renderLogin = (req,res)=>{
-    res.render("login");
+    res.render("login");    
+}   
+    
+
+export const renderProfile = async (req, res) => {
+    const user = req.user;
+    res.render("profile", { user });
+};
+
+
+export const renderForgotPassword = (req, res) => {
+    res.render("forgotPassword")
 }
 
-export const renderCurrent = (req,res)=>{
-    if (req.user) {
-       return res.send({userInfo: req.user}) 
-    }
-    res.send({message: "usuario no logueado"})
+export const renderResetPassword = (req, res) => {
+    // extraer el token de la ruta 
+    const token = req.query.token
+    res.render("resetPassword", {token})
 }

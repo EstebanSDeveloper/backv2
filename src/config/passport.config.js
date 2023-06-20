@@ -1,6 +1,7 @@
 import passport from "passport";
 import jwt from "passport-jwt"
 import { options } from "./options.js";
+  
 
 const jwtStrategy = jwt.Strategy;
 const extractJWT  = jwt.ExtractJwt;

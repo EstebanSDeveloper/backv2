@@ -1,25 +1,25 @@
-<div style="background:blueviolet;color:white;padding:10px">Bienvenido {{name}}</div>
-<h1>Productos</h1>
-<br/>
+<br>
+<div class="welcome">Bienvenido {{name}}, estos son los productos disponibles</div>
+<h1 class="title">Productos</h1>
 {{#if totalDocs}}
-    Listado de productos
+    <p class="list-title">Listado de productos</p>
     {{#each payload}}
-        <ul>
-            <li> {{this.title}} - Precio: {{this.price}}</li>
-            <a href="/products/{{this._id}}">Ver detalle</a>
-            <button onclick="addToCart(`{{this._id}}`)">Agregar al carrito</button>
+        <ul class="product">
+            <li class="product-info">{{this.title}} - Precio: {{this.price}}</li>
+            <a class="product-link" href="/products/{{this._id}}">Ver detalle</a>
+            <button class="add-to-cart" onclick="addToCart(`{{this._id}}`)">Agregar al carrito</button>
         </ul>
     {{/each}}
-    <div>
+    <div class="pagination">
         {{#if hasPrevPage}}
-            <a href={{prevLink}}> << Anterior</a>
+            <a class="prev-link" href={{prevLink}}> << Anterior</a>
         {{/if}}
-        {{this.page}}
+        <span class="current-page">{{this.page}}</span>
         {{#if hasNextPage}}
-            <a href={{nextLink}}>Siguiente >></a>
+            <a class="next-link" href={{nextLink}}>Siguiente >></a>
         {{/if}}
     </div>
 {{else}}
-    <p>No hay productos</p>
+    <p class="no-products">No hay productos</p>
 {{/if}}
 <script src="/js/products.js"></script>

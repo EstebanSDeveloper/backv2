@@ -1,11 +1,21 @@
 <h1>Login</h1>
 
+<h3 class="welcome">{{message}}</h3>
+<br>
+
 <div>
     <form method="post" action="/api/sessions/login">
         <input type="text" placeholder="correo" name="email"/>
         <br/>
+        <br/>
         <input type="password" placeholder="contrasena" name="password"/>
+        <br/>
         <br/>
         <button type="submit">Iniciar sesion</button>
     </form>
+<br>
+<a href="/forgot-password">
+    <button>Restablecer constraseña</button>
+</a>
+
 </div>
