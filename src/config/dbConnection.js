@@ -7,3 +7,4 @@ try {
 } catch (error) {
     console.log(`Hubo un error conectandose a la base ${error}`);
 }
+

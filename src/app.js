@@ -7,6 +7,7 @@ import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { webRouter } from "./routes/web.routes.js";
 import { mocksRouter } from "./routes/mock.routes.js";
+import { usersRouter } from "./routes/users.routes.js";
 import "./config/dbConnection.js";
 import { Server } from "socket.io";
 import { chatManagerMongo } from "./daos/managers/chatManagerMongo.js";
@@ -42,7 +43,7 @@ httpServer.on("error", (error) => console.log(`Error in server ${error}`));
 initializePassport();
 app.use(passport.initialize());
 
-//configuracion motor de plantillas
+//configuracion motor de plantillas handlebars
 app.engine(".hbs", handlebars.engine({ extname: ".hbs" }));
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", ".hbs");
@@ -53,6 +54,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", authRouter);
 app.use("/api/mockingproducts", mocksRouter)
+app.use("/api/users", usersRouter)
 app.use(errorHandler)
 
 //configuración socket servidor

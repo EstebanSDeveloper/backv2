@@ -28,9 +28,29 @@ const userSchema = new mongoose.Schema({
 	role: {
 		type: String,
 		required: true,
-		enum: ["user", "admin"],
+		enum: ["user", "admin", "premium"],
 		default: "user",
 	},
+	documents:{
+		type: [
+			{
+				name: {type: String, required: true},
+				reference: {type: String, required: true}
+			}
+		],
+		default: []
+	},
+	last_connection: {
+		type: Date, // formato JS enviado de esta manera: new Date() 
+		default: null
+	},
+	status:{
+		type: String,
+		required: true,
+		enum: ["complete", "incomplete", "waiting"],
+		default: "waiting"
+	},
+	avatar:{ type: String, default:""}
 });
 
 export const UserModel = mongoose.model(userCollection, userSchema);

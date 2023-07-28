@@ -21,11 +21,13 @@ export const tokenSignupController = async (req, res) => {
                 last_name, 
                 email,
                 password: createHash(password),
-                role
+                role,
+                avatar:req.file.path
             }
             const userCreated = await userManager.addUser(newUser)
+            //console.log("usuario creado:",userCreated)
             // le asignamos un token al usuario
-            const token = jwt.sign({ first_name: userCreated.first_name, last_name: userCreated.last_name, email: userCreated.email, role: userCreated.role,  _id: userCreated._id},
+            const token = jwt.sign({ first_name: userCreated.first_name, last_name: userCreated.last_name, email: userCreated.email, role: userCreated.role,  _id: userCreated._id, avatar: userCreated.avatar},
             options.server.secretToken,{ expiresIn: "24h" });
 			res.cookie(options.server.cookieToken, token, {
 				httpOnly: true,
@@ -47,11 +49,19 @@ export const tokenLoginController = async (req, res) => {
 			// validar contraseña
 			if (isValidPassword(password, user)) {
 				// generar el token para ese usuario; esta es la información que se va a guardar en el token
-				const token = jwt.sign({ first_name: user.first_name, last_name: user.last_name, email: user.email, role: user.role, _id: user._id},
+				const token = jwt.sign(
+                    {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    email: user.email,
+                    role: user.role,
+                    _id: user._id
+                },
                 options.server.secretToken,{ expiresIn: "24h" });
 				res.cookie(options.server.cookieToken, token, {
 					httpOnly: true,
 				}).redirect("/profile");
+                console.log(user)
 			} else {
                 res.send(`<div>credenciales invalidas, <a href="/login">Intente de nuevo</a></div>`);
 			}
@@ -64,10 +74,15 @@ export const tokenLoginController = async (req, res) => {
 }
 
 export const tokenLogoutController = (req,res)=>{
-    req.logout(() => {
-        res.clearCookie(options.server.cookieToken).json({status:"success", message:"sesion finalizada"});
+    // tuve que agregar el middleware en la ruta para obtener la inforamcion del usuario
+    const user = {...req.user}
+    //console.log(user)
+    user.last_connection = new Date();
+    req.logout(async () => {
+        res.clearCookie(options.server.cookieToken).json({status:"success", message:"sesion finalizada"})
+        const usedUpdated = await UserModel.findByIdAndUpdate(user._id, user);
     });
-}
+ }
 
 export const forgotPasswordController = async (req,res)=>{
     try {

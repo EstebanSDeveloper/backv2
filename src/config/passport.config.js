@@ -1,6 +1,7 @@
 import passport from "passport";
 import jwt from "passport-jwt"
 import { options } from "./options.js";
+import { UserModel } from "../daos/models/user.model.js";
   
 
 const jwtStrategy = jwt.Strategy;
@@ -17,14 +18,16 @@ export const initializePassport = () => {
 		},
 		async (jwt_payload, done) => {
 			try {
-				return done(null, jwt_payload)
+				// Aquí agregamos la línea para actualizar la última fecha de conexión del usuario.
+				const user = jwt_payload; // Asumiendo que el payload del token contiene información del usuario.
+				user.last_connection = new Date();
+				const usedUpdated = await UserModel.findByIdAndUpdate(user._id, user)
+				return done(null, jwt_payload, usedUpdated)
 			} catch (error) {
 				return done({status:"error", message: error.message});
 			}
 		}
 	))
-
-		
 };
 
 export const cookieExtractor = (req) => {
@@ -35,3 +38,5 @@ export const cookieExtractor = (req) => {
 	} 
 	return token
 }
+
+

@@ -80,7 +80,8 @@ export const createProductController = async (req, res) => {
 	  body.status = Boolean(body.status);
 	  body.price = Number(body.price);
 	  body.stock = Number(body.stock);
-  
+	  body.owner = req.user._id
+
 	  // Verificar si el producto ya existe
 	  const existingProduct = await productManager.getProductByNameAndCode(body.title, body.code);
 	  // Si el producto ya existe, lanzar un error
@@ -125,9 +126,17 @@ export const updateProductController = async (req, res) => {
 export const deleteProductController = async (req, res) => {
 	try {
 		const productId = req.params.pid;
-		//luego eliminamos el producto
-		const productdeleted = await productManager.deleteProduct(productId);
-		res.json({ status: "success", result: productdeleted.message });
+		const product = await productManager.getProductById(productId)
+		if (product) {
+			if (req.user.role === "premium" && product.owner === req.user._id || req.user.role === "admin") {
+				const productdeleted = await productManager.deleteProduct(productId);
+				return res.json({ status: "success",  message: "El siguiente producto ha sido eliminado", payload: product  });
+			} else {
+				res.json({status: "error", message: "no puedes borrar este producto, no fue creado por ti"})
+			}
+		} else {
+			res.json({ status: "error", message: "Este producto no existe" });
+		}
 	} catch (error) {
 		res.status(400).json({ message: error });
 	}
