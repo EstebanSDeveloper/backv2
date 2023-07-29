@@ -17,6 +17,9 @@ import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/errorHandler.js";
+//documentacion
+import { swaggerSpecs } from "./config/docConfig.js";
+import swaggerUI from "swagger-ui-express"
 
 
 //service
@@ -47,6 +50,9 @@ app.use(passport.initialize());
 app.engine(".hbs", handlebars.engine({ extname: ".hbs" }));
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", ".hbs");
+
+//route for documentations
+app.use("/api/docs", swaggerUI.serve,swaggerUI.setup(swaggerSpecs))
 
 //routes
 app.use(webRouter);

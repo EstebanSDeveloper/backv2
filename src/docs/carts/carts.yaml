@@ -1,0 +1,103 @@
+paths:
+  /api/carts/:
+    post:
+      summary: Agregar un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Cart successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+
+    get:
+      summary: Obtener todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Cart successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar productos a un carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carro al que desea agregar productos
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea agregar al carrito
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto correctamente agregado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      summary: Eliminar productos a un carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carro en el que desea eliminar productos
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea eliminar del carrito
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto correctamente eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "500":
+          description: Error interno del servidor
+
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del carro, autogenerado por la base de datos
+        products:
+          type: array
+          description: Productos en el carrito
+
+      example:
+        _id: "64c4853174b88ace74cbd3f0"
+        products: []
+        __v: 0

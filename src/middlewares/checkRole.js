@@ -1,10 +1,13 @@
 export const checkRole = (roles) => {
-    return (req, res, next ) => {
+    return (req, res, next) => {
         if (!req.user) {
-            return res.json({status:"error", message:"necesitas estar autenticado"})
-        } if (!roles.includes(req.user.role)){
-            return res.json({status:"error", message:"tu rol no está autorizado para realizar esta acción o entrar a esta sección"})
+            return res.status(401).json({ error: "AuthenticationError", message: "Necesitas estar autenticado para realizar esta acción o acceder a esta sección." });
+        } 
+        
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ error: "ForbiddenError", message: "Tu rol no está autorizado para realizar esta acción o acceder a esta sección." });
         }
-        next()
-    }
-}   
+        
+        next();
+    };
+};

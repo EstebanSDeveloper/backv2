@@ -1,0 +1,199 @@
+paths:
+  /api/products/:
+    post:
+        summary: Agregar un nuevo producto
+        tags:
+          - Products
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/updateProduct'
+        responses:
+          "200":
+            description: Product successfully added
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Products'
+          "500":
+            description: Error interno del servidor
+
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: All the products were successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+        "500":
+          description: Error interno del servidor  
+
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por el ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea obtener
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Se obtuvo el producto correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        "400":
+          description: El Id del producto ingresado no es valido
+        "500":
+          description: Error interno del servidor
+
+    put:
+      summary: Actualizar el producto por el ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el ID del producto que desea actualizar
+          schema: 
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Se actualizó el producto correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/updateProduct'
+        "401":
+          description: Error debes estar autenticado para realizar modificaciones en productos
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      summary: Eliminar un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el ID del producto que desea eliminar
+          schema: 
+            type: string
+      responses:
+        "200":
+          description: Se eliminó el producto correctamente
+        "401":
+          description: Error debes estar autenticado como admin para poder eliminar productos
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del producto autogenerado por la base de datos
+        title:
+          type: string
+          description: nombre del producto
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: costo del producto
+        thumbnail:
+          type: string 
+          description: imagen referencial del producto
+        code:
+          type: number
+          description: código del producto, debe ser de caracter único para cada producto
+        stock:
+          type: number
+          description: Canidad de unidades disponibles para la venta
+        status:
+          type: boolean
+          description: Identifica la existencia o no del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+        owner:
+          type: string
+          description: Codigo del usuario administrador que creó el producto
+
+      example:
+        _id: "649e6119ad068b631362045e"
+        title: "Play Station 5"
+        description: "This is a Play Station 5"
+        price: 1300
+        thumbnail: "Waiting for image"
+        code: "202311"
+        stock: 20
+        status: true
+        category: "Technology"
+        owner: "648e87ed4426fed84b6f1445"
+        __v: 0
+
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: nombre del producto
+        description:
+          type: string
+          description: descripcion del producto
+        price:
+          type: number
+          description: costo del producto
+        thumbnail:
+          type: string 
+          description: imagen referencial del producto
+        code:
+          type: number
+          description: código del producto, debe ser de caracter único para cada producto
+        stock:
+          type: number
+          description: Canidad de unidades disponibles para la venta
+        status:
+          type: boolean
+          description: Identifica la existencia o no del producto
+        category:
+          type: string
+          description: Categoria a la que pertenece el producto
+      
+      example:
+        title: "Play Station 5"
+        description: "This is a Play Station 5"
+        price: 1300
+        thumbnail: "Waiting for image"
+        code: "202311"
+        stock: 20
+        status: true
+        category: "Technology"
+
+  
