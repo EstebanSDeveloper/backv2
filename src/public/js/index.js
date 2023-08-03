@@ -1,4 +1,4 @@
-console.log("index.js")
+
 const logoutBtn = document.getElementById("logoutBtn");
 
 logoutBtn.addEventListener("click",()=>{

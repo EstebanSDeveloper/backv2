@@ -1,4 +1,8 @@
 import { UserModel } from "../daos/models/user.model.js";
+import { UserManagerMongo} from '../daos/managers/userManagerMongo.js'
+
+//servicio
+const userManager = new UserManagerMongo(UserModel)
 
 export const updateUserToPremium = async (req, res) => {
     try {
@@ -71,4 +75,36 @@ export const uploadDocuments = async (req, res) => {
     } catch (error) {
         res.json({ error: error, message: "Hubo un error al cargar los documentos"})
     }
+}
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await userManager.getUsers()
+        res.json({status:"success", result:users, message:"This are the Users"})
+    } catch (error) {
+        res.status(400).json({status:"error", error:error.message});
+    }
+}
+
+export const deleteNotConnectedUser = async (req, res) => {
+    try {
+        const users = await userManager.deleteNotConnected()
+        res.json({status:"success", result:users, message:"This users have been deleted for innactivity over 30 days."})
+    } catch (error) {
+        res.status(400).json({status:"error", error:error.message});
+    }
+}
+
+export const deleteUserById = async (req, res) => {
+    try {
+        const userId= req.params.uid;
+        const user = await UserModel.findById(userId)
+        if (user) {
+            const userDeleted = await userManager.deleteUser(userId);
+            return res.json({ status: "success",  message: "El siguiente usuario ha sido eliminado", payload: userDeleted  })
+        }
+    } catch (error) {
+        res.status(400).json({ message: error });
+    }
+
 }

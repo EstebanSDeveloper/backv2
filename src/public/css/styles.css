@@ -1,106 +1,47 @@
-nav {
-    background-color: #f5f5f5;
-    padding: 10px;
-  }
-  
-  nav span {
-    margin-right: 10px;
-  }
-  
-  nav a {
-    color: #333;
-    text-decoration: none;
-    padding: 5px;
-  }
-  
-  nav a:hover {
-    color: #fff;
-    background-color: #333;
-  }
-  
-  #logoutBtn {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-  }
-  
-  #logoutBtn:hover {
-    background-color: #666;
-  }
+/* NAVIGATION */
 
-/* ESTILOS PRODUCTS */
-  
-  body {
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
+nav {
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+  margin-right: 10px; /* Añadir espacio entre los elementos */
+}
+
+nav a:hover {
+  color: #fff;
+  background-color: #333;
+}
+
+#logoutBtn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#logoutBtn:hover {
+  background-color: #666;
+}
+
+
+/* BODY STYLES */
+
+body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
 }
 
 .welcome {
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 10px;
 }
-
-.title {
-    color: #333;
-    font-size: 25px;
-    margin-bottom: 20px;
-}
-
-.list-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.product {
-    list-style: none;
-    margin-bottom: 10px;
-}
-
-.product-info {
-    color: #666;
-    margin-bottom: 5px;
-}
-
-.product-link {
-    text-decoration: none;
-    color: #333;
-    margin-right: 10px;
-}
-
-.add-to-cart {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.prev-link,
-.next-link {
-    color: #333;
-    text-decoration: none;
-    margin: 0 5px;
-}
-
-.current-page {
-    font-weight: bold;
-}
-
-.no-products {
-    color: #666;
-}
-
-/* PROFILE  */
 
 .title {
   color: #333;
@@ -108,9 +49,108 @@ nav {
   margin-bottom: 10px;
 }
 
-.welcome,
-.email,
-.role {
-  color: #666;
+.list-title {
+  font-weight: bold;
   margin-bottom: 10px;
+}
+
+.product {
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.product-info {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.product-link {
+  text-decoration: none;
+  color: #333;
+  margin-right: 10px;
+}
+
+.add-to-cart {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.prev-link,
+.next-link {
+  color: #333;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.current-page {
+  font-weight: bold;
+}
+
+.no-products {
+  color: #666;
+}
+
+/* USER CARD STYLES */
+
+.user-card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.user-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.user-email,
+.user-role,
+.user-last-connection {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.user-role {
+  font-weight: bold;
+}
+
+.roleBtn,
+.deleteUserBtn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.roleBtn:hover,
+.deleteUserBtn:hover {
+  background-color: #666;
 }

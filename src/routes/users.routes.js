@@ -3,10 +3,13 @@ import { checkRole } from "../middlewares/checkRole.js"
 import passport from "passport"
 import { uploaderDocument } from "../utils.js"
 import { checkAuthentication } from "../middlewares/checkAuthentication.js"
-import { updateUserToPremium } from "../controllers/users.controller.js"
-import { uploadDocuments } from "../controllers/users.controller.js"
+import { updateUserToPremium, uploadDocuments, getUsers, deleteNotConnectedUser, deleteUserById } from "../controllers/users.controller.js"
 
 const router = Router()
+
+router.get('/', getUsers)
+
+router.delete('/:uid', passport.authenticate("authJWT", {session:false}), checkRole(["admin"]), deleteUserById)
 
 router.put('/premium/:uid', passport.authenticate("authJWT", {session:false}), checkRole(["admin"]), updateUserToPremium)
 
@@ -15,5 +18,7 @@ router.put("/:uid/documents", passport.authenticate("authJWT", {session:false}),
     {name: "domicilio", maxCount:1},
     {name: "estadoDeCuenta", maxCount:1}
     ]), uploadDocuments)
+
+router.delete('/', deleteNotConnectedUser)
 
 export {router as usersRouter}

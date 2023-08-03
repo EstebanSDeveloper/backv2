@@ -1,0 +1,25 @@
+<nav>
+  <h1 class="title">Bienvenido Admin {{user.first_name}} {{user.last_name}}</h1>
+</nav>
+<h1 class="title">Lista de Usuarios</h1>
+
+ {{#each users}}
+  <div class="user-card">
+    <div class="user-avatar">
+      <img src="{{this.avatar}}" alt="Avatar">
+    </div>
+    <div class="user-info">
+      <h4 class="user-name">User Name: {{this.first_name}} {{this.last_name}}</h4>
+      <p class="user-email">Email: {{this.email}}</p>
+      <p class="user-role">Role: {{this.role}}</p>
+      <button class="roleBtn" data-user-id="{{this._id}}">Cambiar Rol</button>
+      {{#if this.last_connection}}
+      <p class="user-last-connection">Última conexión: {{this.last_connection}}</p>
+      {{else}}
+      <p class="user-last-connection">Última conexión: No disponible</p>
+      {{/if}}
+    </div>
+    <button class="deleteUserBtn" data-user-id="{{this._id}}">Eliminar Usuario</button>
+  </div>
+  <br>
+  {{/each}}
