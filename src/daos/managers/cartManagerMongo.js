@@ -15,9 +15,11 @@ class CartManagerMongo{
         }
     };
 
-    async addCart(){
+    async addCart(userId){
         try {
-            const cart={};
+            const cart={
+              user: userId, // Asignamos el ID del usuario al carrito
+            };
             const data = await this.model.create(cart);
             const response = JSON.parse(JSON.stringify(data));
             return response;

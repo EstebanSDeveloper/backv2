@@ -18,14 +18,15 @@ export const getCarts = async(req, res) => {
     }
 }
 
-export const addCartController = async(req,res)=>{
-    try {
-        const cartAdded = await cartManager.addCart();
-        res.json({status:"success", result:cartAdded, message:"cart created"});
-    } catch (error) {
-        res.status(400).json({status:"error", error:error.message});
-    }
-}
+// export const addCartController = async(req,res)=>{
+//     try {
+//         const cartAdded = await cartManager.addCart();
+//         res.json({status:"success", result:cartAdded, message:"cart created"});
+//     } catch (error) {
+//         res.status(400).json({status:"error", error:error.message});
+//     }
+// }
+  
 
 export const deleteCartController = async(req, res) => {
     try {
@@ -58,7 +59,8 @@ export const addProductToCartController = async(req,res)=>{
         const product = await productManager.getProductById(productId);
         //console.log("product: ", product);
         const cartUpdated = await cartManager.addProductToCart(cartId, productId);
-        res.json({status:"success", result:cartUpdated, message:"product added"});
+
+        res.json({status:"success", result:cartUpdated, message:"Product added to cart successfully"});
     } catch (error) {
         res.status(400).json({status:"error", error:error.message});
     }

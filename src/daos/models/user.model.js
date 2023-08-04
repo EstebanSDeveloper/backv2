@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { cartCollection } from "./cart.model.js";
+import { CartModel } from "./cart.model.js";
 
 const userCollection = "users";
 
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
 	},
 	cart: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: cartCollection,
+		ref: CartModel, // referencia al modelo del carro 
 	},
 	role: {
 		type: String,

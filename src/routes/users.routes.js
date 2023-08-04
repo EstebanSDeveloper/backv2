@@ -3,11 +3,13 @@ import { checkRole } from "../middlewares/checkRole.js"
 import passport from "passport"
 import { uploaderDocument } from "../utils.js"
 import { checkAuthentication } from "../middlewares/checkAuthentication.js"
-import { updateUserToPremium, uploadDocuments, getUsers, deleteNotConnectedUser, deleteUserById } from "../controllers/users.controller.js"
+import { updateUserToPremium, uploadDocuments, getUsers, deleteNotConnectedUser, deleteUserById, userCartController } from "../controllers/users.controller.js"
 
 const router = Router()
 
 router.get('/', getUsers)
+
+router.get('/userCart', passport.authenticate("authJWT", {session:false}), userCartController)
 
 router.delete('/:uid', passport.authenticate("authJWT", {session:false}), checkRole(["admin"]), deleteUserById)
 

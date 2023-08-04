@@ -108,3 +108,25 @@ export const deleteUserById = async (req, res) => {
     }
 
 }
+
+// Controlador para obtener los datos del usuario autenticado
+export const userCartController = async (req, res) => {
+    try {
+      const userId = req.user._id; // Aquí puedes obtener el ID del usuario directamente desde req.user
+      const user = await UserModel.findById(userId).populate("cart");
+      if (user) {
+        const cartId = user.cart._id; // Obtener el cartId del usuario
+        console.log(cartId); // Aquí puedes ver el cartId en el servidor (opcional)
+  
+        // Enviar los datos del usuario (incluido el cartId) como respuesta JSON
+        res.json({ cart: cartId });
+      } else {
+        console.log("Usuario no encontrado");
+        res.status(404).json({ message: "Usuario no encontrado" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error al obtener los datos del usuario" });
+    }
+  };
+  

@@ -4,42 +4,57 @@ import jwt from "jsonwebtoken";
 import { options } from "../config/options.js";
 import { sendRecoveryPass } from "../utils/email.js";
 import { generateEmailToken , verifyEmailToken, isValidPassword, createHash} from "../utils.js";
+import { CartManagerMongo } from "../daos/managers/cartManagerMongo.js";
+import { CartModel } from "../daos/models/cart.model.js";
 
 const userManager = new UserManagerMongo(UserModel);
+const cartManager = new CartManagerMongo(CartModel);
 
 export const tokenSignupController = async (req, res) => {
     try {
-        const { first_name, last_name, email, password } = req.body;
-        const user = await userManager.getUserByEmail(email);
-        if (!user) {
-            let role='user';
-	        if (email.endsWith("@coder.com")) {
-	            role = "admin";
-	        }
-            const newUser = {
-                first_name, 
-                last_name, 
-                email,
-                password: createHash(password),
-                role,
-                avatar:req.file.path
-            }
-            const userCreated = await userManager.addUser(newUser)
-            //console.log("usuario creado:",userCreated)
-            // le asignamos un token al usuario
-            const token = jwt.sign({ first_name: userCreated.first_name, last_name: userCreated.last_name, email: userCreated.email, role: userCreated.role,  _id: userCreated._id, avatar: userCreated.avatar},
-            options.server.secretToken,{ expiresIn: "24h" });
-			res.cookie(options.server.cookieToken, token, {
-				httpOnly: true,
-			}).redirect("/products");
-        } else {
-            res.send(`<div>el usuario ya está registrado, <a href="/login">Loguearse</a></div>`);
+      const { first_name, last_name, email, password } = req.body;
+      const user = await userManager.getUserByEmail(email);
+      if (!user) {
+        let role = 'user';
+        if (email.endsWith("@coder.com")) {
+          role = "admin";
         }
+        const newUser = {
+          first_name,
+          last_name,
+          email,
+          password: createHash(password),
+          role,
+          avatar: req.file.path
+        };
+        const userCreated = await userManager.addUser(newUser);
+        // Crear el carrito para el usuario recién creado
+        const cartAdded = await cartManager.addCart(userCreated._id);
+        // Asignar el ID del carro al usuario utilizando el modelo UserModel
+        await UserModel.findByIdAndUpdate(userCreated._id, { cart: cartAdded._id });
+        // le asignamos un token al usuario
+        const token = jwt.sign({ first_name: userCreated.first_name, last_name: userCreated.last_name, email: userCreated.email, role: userCreated.role,  _id: userCreated._id, avatar: userCreated.avatar },
+          options.server.secretToken, { expiresIn: "24h" });
 
+        console.log(cartAdded._id);
+        // Configurar la cookie "cartId" con el ID del carrito y enviarla al cliente
+        res.cookie("cartId", cartAdded._id, {
+            httpOnly: true,
+        });
+
+        // Configurar la cookie de token y redirigir al cliente a "/products"
+        res.cookie(options.server.cookieToken, token, {
+          httpOnly: true,
+        }).redirect("/products");
+        
+      } else {
+        res.send(`<div>el usuario ya está registrado, <a href="/login">Loguearse</a></div>`);
+      }
     } catch (error) {
-        res.json({ status: "error", message: error.message });
+      res.json({ status: "error", message: error.message });
     }
-}
+  };
+  
 
 export const tokenLoginController = async (req, res) => {
 	const { email, password } = req.body;
