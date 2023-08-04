@@ -7,8 +7,9 @@
         <ul class="product">
             <li class="product-info">{{this.title}} - Precio: {{this.price}}</li>
             <a class="product-link" href="/products/{{this._id}}">Ver detalle</a>
-            <button class="add-to-cart" onclick="addToCart(`{{this._id}}`)">Agregar al carrito</button>
+            <button class="addToCartBtn" dataproductId="{{this._id}}">Agregar al carrito</button>
         </ul>
+
     {{/each}}
     <div class="pagination">
         {{#if hasPrevPage}}
