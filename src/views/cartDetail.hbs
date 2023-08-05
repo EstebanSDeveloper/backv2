@@ -1,17 +1,21 @@
-<h1>Vista del carrito</h1>
-{{#if _id}}
-    {{#if products}}
-        <h2>Listado de productos agregados</h2>
+ <div class="container">
+    <h1 class="title">Tu carrito de compras</h1>
+    {{#if _id}}
+      {{#if products}}
+        <h2 class="list-title">Listado de productos agregados</h2>
         {{#each products}}
-            <div style="background:aquamarine">
-                <p>{{this.id.title}}</p>
-                <p>Cantidad: {{this.quantity}}</p>
-            </div>
+          <div class="product-cart">
+            <h3 class="product-info-cart">{{this.id.title}}</h3>
+            <p class="product-info-cart-quantity">Cantidad: {{this.quantity}}</p>
+            <h4 class="product-info-price">Precio: {{this.price}}</h4>
+             <button class="deleteCartBtn" data-product-id="{{_id}}">Eliminar producto {{this._id}}</button>
+          </div>
         {{/each}}
+      {{else}}
+        <p class="no-products">No hay productos en el carrito</p>
+      {{/if}}
     {{else}}
-        No hay productos en el carrito
+      <p class="no-details">No hay detalles</p>
     {{/if}}
-{{else}}
-    <p>No hay detalles</p>
-{{/if}}
-<script src="/js/cart.js"></script>
+    <button class="addToCartBtn" >Finalizar la compra</button>
+  </div>

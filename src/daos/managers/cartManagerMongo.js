@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import { ProductModel } from "../models/product.model.js";
+import { ProductManagerMongo } from "./productManagerMongo.js";
+
+//services
+const productManager = new ProductManagerMongo(ProductModel);
 
 class CartManagerMongo{
     constructor(model){
@@ -55,17 +60,18 @@ class CartManagerMongo{
         }
     };
 
-    async addProductToCart(cartId, productId) {
+    async addProductToCart(cartId, productId, productPrice) {
         try {
             const cart = await this.getCartById(cartId);
             const existingProduct = cart.products.find((product) => product.id && product.id._id === productId);
-          //console.log(existingProduct)
+
           if (existingProduct) {
             existingProduct.quantity += 1;
           } else {
             const newProduct = {
               id: productId,
               quantity: 1,
+              price: productPrice
             };
             cart.products.push(newProduct);
           }
@@ -80,7 +86,7 @@ class CartManagerMongo{
       async deleteProduct(cartId, productId) {
         try {
           const cart = await this.getCartById(cartId);
-          const productIndex = cart.products.findIndex((product) => product.id && product.id._id === productId);
+          const productIndex = cart.products.findIndex((product) => product.id && product.id._id.toString() === productId.toString());
 
       
           if (productIndex === -1) {

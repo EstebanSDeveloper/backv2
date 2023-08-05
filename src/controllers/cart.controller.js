@@ -18,14 +18,14 @@ export const getCarts = async(req, res) => {
     }
 }
 
-// export const addCartController = async(req,res)=>{
-//     try {
-//         const cartAdded = await cartManager.addCart();
-//         res.json({status:"success", result:cartAdded, message:"cart created"});
-//     } catch (error) {
-//         res.status(400).json({status:"error", error:error.message});
-//     }
-// }
+export const addCartController = async(req,res)=>{
+    try {
+        const cartAdded = await cartManager.addCart();
+        res.json({status:"success", result:cartAdded, message:"cart created"});
+    } catch (error) {
+        res.status(400).json({status:"error", error:error.message});
+    }
+}
   
 
 export const deleteCartController = async(req, res) => {
@@ -58,7 +58,7 @@ export const addProductToCartController = async(req,res)=>{
         //console.log("cart: ", cart);
         const product = await productManager.getProductById(productId);
         //console.log("product: ", product);
-        const cartUpdated = await cartManager.addProductToCart(cartId, productId);
+        const cartUpdated = await cartManager.addProductToCart(cartId, productId, product.price);
 
         res.json({status:"success", result:cartUpdated, message:"Product added to cart successfully"});
     } catch (error) {
@@ -71,10 +71,9 @@ export const deleteProductFromCartController = async(req,res)=>{
         const cartId = req.params.cid;
         const productId = req.params.pid;
         const cart = await cartManager.getCartById(cartId);
-        // console.log("cart: ", cart);
         const product = await productManager.getProductById(productId);
-        // // console.log("product: ", product);
-        const response = await cartManager.deleteProduct(cartId, productId);
+
+        const response = await cartManager.deleteProduct(cartId, product._id);
         res.json({status:"success", result:response, message:"product deleted"});
     } catch (error) {
         res.status(400).json({status:"error", error:error.message});

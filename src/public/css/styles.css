@@ -12,6 +12,20 @@ nav a {
   margin-right: 10px; /* Añadir espacio entre los elementos */
 }
 
+#cartBtn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 20px;
+  border-radius: 20px;
+}
+
+#cartBtn:hover {
+  background-color: #666;
+}
+
 nav a:hover {
   color: #fff;
   background-color: #333;
@@ -23,6 +37,7 @@ nav a:hover {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  border-radius: 20px;
 }
 
 #logoutBtn:hover {
@@ -153,4 +168,40 @@ body {
 .roleBtn:hover,
 .deleteUserBtn:hover {
   background-color: #666;
+}
+
+
+/* CART STYLES */
+
+.product-cart {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 15px; /* Margen superior e inferior y centrar horizontalmente */
+  max-width: 40%; /* Ancho máximo */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.product-info-cart {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+
+.product-info-cart-quantity {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.product-info-price {
+  color: #333;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.no-products,
+.no-details {
+  color: #666;
+  font-size: 18px;
+  margin-top: 15px;
 }

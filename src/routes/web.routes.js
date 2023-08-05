@@ -12,7 +12,7 @@ router.get("/products", passport.authenticate("authJWT", {session:false}),checkA
 
 router.get("/products/:pid", renderProduct);
 
-router.get("/cart/:cid", renderCart);
+router.get("/cart/:cid", passport.authenticate("authJWT", {session:false}),checkAuthentication, renderCart);
 
 //rutas vistas autenticacion
 

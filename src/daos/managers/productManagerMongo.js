@@ -38,7 +38,7 @@ class ProductManagerMongo{
             if (typeof id === 'string' && id.trim().length != 24) {
                 throw new Error("El Id de producto ingresado no es válido");
             }
-            const data = await this.model.findById(id);
+            const data = await this.model.findById({_id:id});
             if(data){
                 // console.log("data", data)
                 const response = JSON.parse(JSON.stringify(data));
