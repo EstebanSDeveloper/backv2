@@ -39,4 +39,5 @@ router.delete("/:cid",deleteProductsInCartController);
 //finalizar la compra
 router.post("/:cid/purchase", passport.authenticate("authJWT", {session:false}),purchaseCartController);
 
+
 export {router as cartsRouter};

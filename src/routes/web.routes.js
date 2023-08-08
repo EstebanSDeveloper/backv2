@@ -1,8 +1,8 @@
 import {Router} from "express";
-import { renderChat, renderProducts,renderProduct, renderCart, renderProfile, renderSignup, renderLogin, renderForgotPassword, renderResetPassword, renderAdmin} from "../controllers/web.controller.js";
+import { checkRole } from "../middlewares/checkRole.js";
+import { renderChat, renderProducts,renderProduct, renderCart, renderProfile, renderSignup, renderLogin, renderForgotPassword, renderResetPassword, renderAdmin, purchase} from "../controllers/web.controller.js";
 import passport from "passport"
 import { checkAuthentication } from "../middlewares/checkAuthentication.js";
-import { checkRole } from "../middlewares/checkRole.js";
 
 const router = Router();
 
@@ -27,5 +27,7 @@ router.get("/reset-password", renderResetPassword);
 router.get("/profile", passport.authenticate("authJWT", { session: false }), renderProfile); 
 
 router.get('/admin', passport.authenticate("authJWT", {session:false}), checkRole(["admin"]), renderAdmin)
+
+router.get('/purchase', passport.authenticate("authJWT", { session: false }), purchase)
 
 export {router as webRouter}

@@ -108,6 +108,11 @@ export const renderProfile = async (req, res) => {
     res.render("profile", { user });
 };
 
+export const purchase = (req, res) => {
+    const user = req.user;
+    res.render("purchase", { user });
+}
+
 
 export const renderForgotPassword = (req, res) => {
     res.render("forgotPassword")

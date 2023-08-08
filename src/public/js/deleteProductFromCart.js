@@ -25,6 +25,7 @@ deleteCartBtn.forEach(async (btn) => {
             if (deleteData.message) {
                 alert(deleteData.message);
                 console.log(deleteData);
+                location.reload();
             }
         } catch (error) {
             console.error(error);
