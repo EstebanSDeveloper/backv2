@@ -166,10 +166,10 @@ export const purchaseCartController =async(req,res)=>{
             }
             //console.log("ticketProducts",ticketProducts)
             //console.log("rejectedProducts",rejectedProducts)
-            const purchaseDatetime = new Date().toLocaleString(); // Obtener la fecha y hora actual como una cadena formateada
+            const purchaseDatetime = new Date().toLocaleString(); // otra opcion es con .tolSOString() Obtener la fecha y hora actual como una cadena formateada
             const newTicket = {
                 code:uuidv4(),
-                //purchase_datetime: new Date(purchaseDatetime), // Convertir la cadena formateada en un objeto Date
+                purchase_datetime: new Date(purchaseDatetime), // Convertir la cadena formateada en un objeto Date
                 amount: totalPrice, // Asignar el total de precios al campo amount del ticket
                 purchaser: req.user.email
             }
